@@ -22,6 +22,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
 import AddGames from '../AddGames/AddGames';
+import RankGames from '../RankGames/RankGames';
 
 function App() {
   const dispatch = useDispatch();
@@ -73,6 +74,22 @@ function App() {
             // logged in shows AddGames page else shows LoginPage
             exact
             path="/inputs"
+          >
+            <AddGames />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows AddGames page else shows LoginPage
+            exact
+            path="/rank"
+          >
+            <RankGames />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows AddGames page else shows LoginPage
+            exact
+            path="/list"
           >
             <AddGames />
           </ProtectedRoute>
