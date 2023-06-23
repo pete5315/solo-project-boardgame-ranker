@@ -21,6 +21,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 
 import './App.css';
+import AddGames from '../AddGames/AddGames';
 
 function App() {
   const dispatch = useDispatch();
@@ -66,6 +67,14 @@ function App() {
             path="/info"
           >
             <InfoPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute
+            // logged in shows AddGames page else shows LoginPage
+            exact
+            path="/inputs"
+          >
+            <AddGames />
           </ProtectedRoute>
 
           <Route
