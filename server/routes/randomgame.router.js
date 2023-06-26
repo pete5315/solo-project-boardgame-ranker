@@ -11,17 +11,24 @@ const router = express.Router();
 router.get("/:id", rejectUnauthenticated, (req, res) => {
   console.log(req.params.id)
   pool
-  .query(`SELECT games_array FROM lists WHERE id = $1;`, [req.params.id])
+  .query(`SELECT games_array, data_array FROM lists WHERE id = $1;`, [req.params.id])
   .then((results) => {
     let games=(results.rows[0].games_array)
-    console.log(games);
+    let data=(results.rows[0].data_array)
+    console.log("games", games);
+    console.log("data", data)
     let returnedGames=[]
-    for(let i=0; i<4; i) {
-      let randomNumber=Math.floor(Math.random() * games.length);
-      if(!returnedGames.includes(games[randomNumber])) {
-        console.log("added ", games[randomNumber])
-        returnedGames.push({name: games[randomNumber], id:randomNumber});
-        i++;
+    let returnedGamesNumber=[]
+    for(let i=0; i<4; i++) {
+      let rn=Math.floor(Math.random() * games.length); //rn is randomNumber
+      console.log(rn, games[rn], returnedGames)
+      if(!(returnedGamesNumber.includes(rn))) {
+        console.log("added ", games[rn])
+        returnedGames.push({name: games[rn], id:rn});
+        returnedGamesNumber.push(rn);
+        console.log(returnedGamesNumber)
+      } else {
+        i--;
       }
     }
     res.send(returnedGames);
