@@ -20,7 +20,7 @@ router.get("/:id", rejectUnauthenticated, (req, res) => {
       let randomNumber=Math.floor(Math.random() * games.length);
       if(!returnedGames.includes(games[randomNumber])) {
         console.log("added ", games[randomNumber])
-        returnedGames.push(games[randomNumber]);
+        returnedGames.push({name: games[randomNumber], id:randomNumber});
         i++;
       }
     }

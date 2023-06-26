@@ -6,6 +6,7 @@ import userListsSaga from './user_lists.saga';
 import newListSaga from './new_list.saga';
 import newGameSaga from './add_game.saga';
 import getRandomGamesSaga from './get_random_games.saga'
+import sendCurrentRankSaga from './send_current_rank.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -23,5 +24,6 @@ export default function* rootSaga() {
     newListSaga(),
     newGameSaga(),
     getRandomGamesSaga(),
+    sendCurrentRankSaga(),
   ]);
 }

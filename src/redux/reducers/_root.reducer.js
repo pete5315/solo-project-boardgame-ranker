@@ -5,6 +5,7 @@ import userLists from './user_lists.reducer'
 import currentList from './current_list.reducer';
 import games from './games.reducer';
 import randomGames from './random_games.reducer'
+import currentRank from './current_rank.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   currentList,
   games,
   randomGames,
+  currentRank,
 });
 
 export default rootReducer;
