@@ -11,7 +11,7 @@ const router = express.Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   console.log("get user lists 13")
-  pool.query(`SELECT * FROM lists WHERE user_id = $1;`, [req.user.id])
+  pool.query(`SELECT * FROM list WHERE user_id = $1;`, [req.user.id])
 
   // console.log([sqlText])
 

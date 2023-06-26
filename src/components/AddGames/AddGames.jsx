@@ -2,13 +2,12 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import AddedGames from "../AddedGames/AddedGames";
+import { Link } from 'react-router-dom';
 
 function AddGames() {
   let dispatch = useDispatch();
   const [newGameName, setNewGameName] = useState("");
   let listNumber = useSelector(store => store.currentList);
-
-  console.log(listNumber);
 
   useEffect(() => {
     checkIfInList();
@@ -17,7 +16,7 @@ function AddGames() {
   function checkIfInList() {
     if (listNumber) {
       console.log(listNumber)
-      dispatch({type: 'GET_GAMES'})
+      dispatch({type: 'GET_GAMES', payload: {id:listNumber}})
       return
     } else {
         dispatch({type: 'SET_NEW_LIST'});
@@ -26,7 +25,11 @@ function AddGames() {
 
   function submitTheData(event) {
     event.preventDefault();
-    console.log(newGameName);
+    console.log(listNumber);
+    if (listNumber===null) {
+      listNumber=1;
+    }
+  
 
     dispatch({
       type: "ADD_GAME",
@@ -38,6 +41,7 @@ function AddGames() {
   return (
     <div>
       <form onSubmit={(e) => submitTheData(e)}>
+        <Link to='rank'><button>Start ranking</button></Link>
         <label>Game name</label>
         <input
           value={newGameName}

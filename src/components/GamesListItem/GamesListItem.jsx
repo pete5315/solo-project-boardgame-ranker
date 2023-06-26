@@ -1,9 +1,9 @@
 function GamesListItem({ game, i }) {
-  console.log(game);
+  // console.log(game);
   
   return (
   <tr key={i}>
-    <td>{game}</td>
+    <td key={i}>{game}</td>
   </tr>)
 }
 
