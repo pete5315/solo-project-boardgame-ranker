@@ -10,7 +10,7 @@ function RankGames() {
     console.log(currentList);
     dispatch({
       type: "GET_RANDOM_GAMES",
-      payload: 7,
+      payload: currentList,
     });
   }
   console.log("random games", randomGames)
