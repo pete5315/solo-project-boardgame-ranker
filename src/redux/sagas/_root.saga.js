@@ -4,7 +4,8 @@ import registrationSaga from './registration.saga';
 import userSaga from './user.saga';
 import userListsSaga from './user_lists.saga';
 import newListSaga from './new_list.saga';
-import newGameSaga from './addgame.saga';
+import newGameSaga from './add_game.saga';
+import getRandomGamesSaga from './get_random_games.saga'
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -21,5 +22,6 @@ export default function* rootSaga() {
     userListsSaga(),
     newListSaga(),
     newGameSaga(),
+    getRandomGamesSaga(),
   ]);
 }

@@ -12,6 +12,7 @@ const userRouter = require('./routes/user.router');
 const userListRouter = require('./routes/userlist.router');
 const newListRouter = require('./routes/newlist.router');
 const addGameRouter = require('./routes/addgame.router');
+const randomGameRouter = require('./routes/randomgame.router');
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -29,6 +30,7 @@ app.use('/api/user', userRouter);
 app.use('/api/userlist', userListRouter);
 app.use('/api/newlist', newListRouter);
 app.use('/api/addgame', addGameRouter);
+app.use('/api/randomgames', randomGameRouter);
 
 // Serve static files
 app.use(express.static('build'));
