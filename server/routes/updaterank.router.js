@@ -10,7 +10,9 @@ const router = express.Router();
 
 router.post("/:id", rejectUnauthenticated, async (req, res) => {
   const client = await pool.connect();
-  console.log(req.body);
+  console.log("req.body", req.body);
+  console.log(req.params.id, "req.params.id")
+  const listID=req.params.id;
   let currentGames = [];
   let currentBest = req.body.currentBest;
   let currentWorst = req.body.currentWorst;
@@ -20,8 +22,10 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
     if (x.id !== currentBest && x.id !== currentWorst) {
       if (currentMiddle1 === null) {
         currentMiddle1 = x.id;
+        console.log("currentmiddle2",currentMiddle1)
       } else {
         currentMiddle2 = x.id;
+        console.log("currentmiddle2", currentMiddle2)
       }
     }
     console.log(
@@ -40,28 +44,31 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
   try {
     await client.query("BEGIN");
     for (let x of updatesNeeded) {
+      console.log("x",x, currentBest);
       await client.query(
-        `INSERT INTO results (game_id, better_game_id) VALUES ($1, $2);`,
-        [x, currentBest]
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${x}, ${currentBest}, ${listID});`
       );
     }
-    console.log("line 21");
+    console.log("line 21", updatesNeeded);
+    console.log(currentWorst, currentMiddle1, "worstmiddle1")
     await client.query(
-      `INSERT INTO results (game_id, better_game_id) VALUES ($1, $2);`,
-      [currentWorst, currentMiddle1]
+      `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle1}, ${listID});`
     );
+    console.log(currentWorst, currentMiddle2, "worstmiddle2")
     await client.query(
-      `INSERT INTO results (game_id, better_game_id) VALUES ($1, $2);`,
-      [currentWorst, currentMiddle2]
+      `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle2}, ${listID});`
     );
     await client.query("COMMIT");
-    res.sendStatus(200);
+    console.log('finished updating');
+    res.sendStatus(201);
   } catch (error) {
     await client.query("ROLLBACK");
     console.log("Error POST /api/randomgames", error);
     res.sendStatus(500);
   } finally {
+    console.log('finally')
     client.release();
+    console.log('finally2')
   }
 });
 
