@@ -11,7 +11,12 @@ function GameCard(props) {
     if (currentRank.worst === null) {
       dispatch({
         type: "SET_CURRENT_RANK",
-        payload: { ...currentRank, best: props.game.id, randomGames, listID: 4 },
+        payload: {
+          ...currentRank,
+          best: props.game.id,
+          randomGames,
+          listID: currentList,
+        },
       });
     } else {
       console.log("we have a current worst");
@@ -30,7 +35,15 @@ function GameCard(props) {
         payload: { ...currentRank, worst: props.game.id },
       });
     } else {
-      dispatch({ type: "SET_CURRENT_RANK", payload: { worst: props.game.id } });
+      dispatch({
+        type: "SET_CURRENT_RANK",
+        payload: {
+          ...currentRank,
+          worst: props.game.id,
+          randomGames,
+          listID: currentList,
+        },
+      });
     }
   } // console.log("Best is ", best, " and worst is ", worst);
   return (
