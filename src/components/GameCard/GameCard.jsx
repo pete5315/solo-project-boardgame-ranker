@@ -22,7 +22,7 @@ function GameCard(props) {
       console.log("we have a current worst");
       dispatch({
         type: "SEND_CURRENT_RANK",
-        payload: { ...currentRank, best: props.game.id, randomGames },
+        payload: { ...currentRank, best: props.game.id, randomGames, listID: currentList },
       });
     }
   }
@@ -32,7 +32,7 @@ function GameCard(props) {
       console.log("we have a current worst");
       dispatch({
         type: "SEND_CURRENT_RANK",
-        payload: { ...currentRank, worst: props.game.id },
+        payload: { ...currentRank, worst: props.game.id, listID: currentList },
       });
     } else {
       dispatch({
