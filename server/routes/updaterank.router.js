@@ -10,22 +10,23 @@ const router = express.Router();
 
 router.post("/:id", rejectUnauthenticated, async (req, res) => {
   const client = await pool.connect();
-  console.log("req.body", req.body);
-  console.log(req.params.id, "req.params.id")
-  const listID=req.params.id;
-  let currentGames = [];
   let currentBest = req.body.currentBest;
   let currentWorst = req.body.currentWorst;
+  const listID = req.params.id;
+  console.log(currentBest, currentWorst, "bestworst");
+  console.log(req.params.id, "req.params.id");
+  let currentGames = [];
   let currentMiddle1 = null;
-  let currentMiddle2 = -1;
-  for (let x of req.body.randomGames) {
-    if (x.id !== currentBest && x.id !== currentWorst) {
+  let currentMiddle2 = null;
+  for (let randomGameInstance of req.body.randomGames) {
+    if (
+      randomGameInstance.id !== currentBest &&
+      randomGameInstance.id !== currentWorst
+    ) {
       if (currentMiddle1 === null) {
-        currentMiddle1 = x.id;
-        console.log("currentmiddle2",currentMiddle1)
+        currentMiddle1 = randomGameInstance.id;
       } else {
-        currentMiddle2 = x.id;
-        console.log("currentmiddle2", currentMiddle2)
+        currentMiddle2 = randomGameInstance.id;
       }
     }
     console.log(
@@ -39,38 +40,62 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
       currentWorst
     );
   }
-  currentGames.push(currentBest);
   let updatesNeeded = [currentMiddle1, currentMiddle2, currentWorst];
+
   try {
     await client.query("BEGIN");
-    for (let x of updatesNeeded) {
-      console.log("x",x, currentBest);
+    let resultsArray = await client.query(
+      `SELECT game_id, better_game_id FROM results
+  WHERE list_id = $1;`,
+      [req.params.id]
+    );
+    resultsArray = resultsArray.rows;
+    console.log("resultsarray!!!!", resultsArray);
+    //need current better thans for the current best
+    //need current better thans for the middle1
+    //need current better thans for the middle2
+
+    currentGames.push(currentBest);
+    for (let updateNeededInstance of updatesNeeded) {
+      if (updateNeededInstance !== null) {
+        for (let resultInstance of resultsArray) {
+          console.log(
+            "resultInstance.game_id is",
+            resultInstance.game_id,
+            "compared to currentBest.id",
+            currentBest
+          );
+          if (resultInstance.game_id === currentBest) {
+            console.log("found that it's better!", resultInstance);
+            await client.query(
+              `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${updateNeededInstance}, ${resultInstance.better_game_id}, ${listID});`
+            );
+          }
+        }
+        await client.query(
+          `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${updateNeededInstance}, ${currentBest}, ${listID});`
+        );
+      }
+    }
+    if (currentMiddle1 !== null) {
       await client.query(
-        `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${x}, ${currentBest}, ${listID});`
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle1}, ${listID});`
       );
     }
-    console.log("line 21", updatesNeeded);
-    console.log(currentWorst, currentMiddle1, "worstmiddle1")
-    await client.query(
-      `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle1}, ${listID});`
-    );
-    console.log(currentWorst, currentMiddle2, "worstmiddle2")
-    await client.query(
-      `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle2}, ${listID});`
-    );
+    if (currentMiddle2 !== null) {
+      await client.query(
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle2}, ${listID});`
+      );
+    }
     await client.query("COMMIT");
-    console.log('finished updating');
     res.sendStatus(201);
   } catch (error) {
     await client.query("ROLLBACK");
     console.log("Error POST /api/randomgames", error);
     res.sendStatus(201);
   } finally {
-    console.log('finally')
     client.release();
-    console.log('finally2')
   }
 });
 
 module.exports = router;
-

@@ -40,11 +40,12 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
       for (let i = 0; i < 4; i++) {
         let rn = Math.floor(Math.random() * gamesArray.length); //rn is randomNumber
         let currentGame = gamesArray[rn];
-        console.log(rn, currentGame, returnedGames);
+        console.log("line 43", rn, currentGame, returnedGames);
         let skip = 0;
+        
         for (let j = 0; j < resultsArray.length; j++) {
           let x = resultsArray[j];
-          console.log(x, currentGame);
+          // console.log(x, currentGame);
           for (let alreadyAddedGame of returnedGames) {
             console.log(
               "alreadyadded",
@@ -64,7 +65,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
           rn = -1;
         }
         if (!returnedGamesNumber.includes(rn)) {
-          console.log("line 51", rn);
+          console.log("line 68", rn);
           console.log("added ", currentGame.name);
           returnedGames.push({ name: currentGame.name, id: currentGame.id });
           returnedGamesNumber.push(rn);
