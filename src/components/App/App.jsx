@@ -29,6 +29,7 @@ function App() {
   const dispatch = useDispatch();
 
   const user = useSelector(store => store.user);
+  const currentList = useSelector(store => store.currentList);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
@@ -76,7 +77,14 @@ function App() {
             exact
             path="/inputs"
           >
-            <AddGames />
+            {!currentList ?
+              // If the user is already logged in, 
+              // redirect to the /user page
+              <Redirect to="/user" />
+              :
+              // Otherwise, show the login page
+              <AddGames />
+            }
           </ProtectedRoute>
 
           <ProtectedRoute
@@ -84,7 +92,14 @@ function App() {
             exact
             path="/rank"
           >
-            <RankGames />
+            {!currentList ?
+              // If the user is already logged in, 
+              // redirect to the /user page
+              <Redirect to="/user" />
+              :
+              // Otherwise, show the login page
+              <RankGames />
+            }
           </ProtectedRoute>
 
           <ProtectedRoute
@@ -92,7 +107,14 @@ function App() {
             exact
             path="/list"
           >
-            <ListGames />
+            {!currentList ?
+              // If the user is already logged in, 
+              // redirect to the /user page
+              <Redirect to="/user" />
+              :
+              // Otherwise, show the login page
+              <ListGames />
+            }
           </ProtectedRoute>
 
           <Route
