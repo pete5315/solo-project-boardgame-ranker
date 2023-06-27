@@ -64,7 +64,7 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
   } catch (error) {
     await client.query("ROLLBACK");
     console.log("Error POST /api/randomgames", error);
-    res.sendStatus(500);
+    res.sendStatus(201);
   } finally {
     console.log('finally')
     client.release();

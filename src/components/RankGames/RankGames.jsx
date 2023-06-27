@@ -14,6 +14,7 @@ function RankGames() {
       type: "GET_RANDOM_GAMES",
       payload: { currentList },
       callbackHistory,
+      listID: currentList
     });
   }
   console.log("random games", randomGames);
