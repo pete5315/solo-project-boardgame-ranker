@@ -23,7 +23,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import './App.css';
 import AddGames from '../AddGames/AddGames';
 import RankGames from '../RankGames/RankGames';
-import ListGames from '../ListRankedGames/ListRankedGames';
+import ListRankedGames from '../ListRankedGames/ListRankedGames';
 
 function App() {
   const dispatch = useDispatch();
@@ -78,11 +78,8 @@ function App() {
             path="/inputs"
           >
             {!currentList ?
-              // If the user is already logged in, 
-              // redirect to the /user page
               <Redirect to="/user" />
               :
-              // Otherwise, show the login page
               <AddGames />
             }
           </ProtectedRoute>
@@ -113,7 +110,7 @@ function App() {
               <Redirect to="/user" />
               :
               // Otherwise, show the login page
-              <ListGames />
+              <ListRankedGames />
             }
           </ProtectedRoute>
 

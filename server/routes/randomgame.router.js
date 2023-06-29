@@ -40,7 +40,8 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     );
     let returnedGames = [];
     //check if complete
-    if (((gamesLength + 1) / 2) * gamesLength === resultsArray.length) {
+    console.log(((gamesLength + 1) / 2) * gamesLength)
+    if (((gamesLength - 1) / 2) * gamesLength === resultsArray.length) {
       returnedGames.push("complete");
     } else {
       //if not complete
@@ -55,7 +56,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
         if (i === 0) {
           let nCheck = await client.query(
             `SELECT COUNT(results.game_id) FROM results
-          WHERE better_game_id = $1 OR game_id = $1 AND list_id = $2`,
+          WHERE (better_game_id = $1 OR game_id = $1) AND list_id = $2;`,
             [currentGame.id, req.params.id]
           );
           nCheck = nCheck.rows[0].count;
@@ -68,8 +69,12 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
               n = gamesLength - nCheck;
             }
           }
+
         }
-        console.log("skipped games", skippedGames);
+        if (skippedGames.length===gamesArray.length) {
+          i=n+1;
+          console.log("HEY LOOK OVER HERE HEY HEY HEY")
+        }        console.log("skipped games", skippedGames);
         console.log("line 71", rn, currentGame, returnedGames);
         console.log("l", l);
         if (!skippedGames.includes(currentGame.id)) {
@@ -133,22 +138,28 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
               "better games are ",
               x.better_game_id
             );
+            skippedGames.push(x.better_game_id);
           }
+          
           let gameArray2 = await client.query(
             `SELECT results.game_id FROM results WHERE results.list_id=$1 AND results.better_game_id=$2;`,
             [req.params.id, currentGame.id]
           );
-          gameArray2 = gameArray2.rows[0];
-          for (let x of gameArray1) {
+          gameArray2 = gameArray2.rows;
+          console.log(gameArray2)
+          for (let x of gameArray2) {
             console.log(
               "for ",
               currentGame.name,
               "worse games are ",
               x.game_id
             );
+            skippedGames.push(x.game_id);
           }
           console.log(returnedGamesNumber);
           console.log(returnedGames);
+          skippedGames=[...new Set(skippedGames)];
+          console.log("line 155, skipped games", skippedGames)
           l++;
         } else {
           console.log(
@@ -158,7 +169,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
           );
           i--;
           l++;
-          if (l > 50) {
+          if (l > 1000) {
             i++;
           }
           console.log(l);

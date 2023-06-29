@@ -1,17 +1,39 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import RankedGameItem from "../RankedGameItem/RankedGameItem";
 
+function ListRankedGames() {
+  const finishedList = useSelector((store) => store.finishedList);
+  const currentList = useSelector((store) => store.currentList);
 
-function ListGames() {
-// const dispatch=useDispatch;
+  const dispatch = useDispatch();
 
-// useEffect(() => {
-//     dispatch({
-//         type: 'GET_RANKED_LIST'
-//     })
-// }, [])
+  useEffect(() => {
+    getRankedList();
+  }, []);
 
-  return (<div>ListGames</div>)
+  function getRankedList() {
+    dispatch({
+      type: "GET_RANKED_LIST",
+      payload: currentList,
+    });
+  }
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>head1</th>
+          <th>head1</th>
+          <th>head1</th>
+          <th>head1</th>
+        </tr>
+      </thead>
+      <tbody>
+        {finishedList && finishedList.map((list, i) => <RankedGameItem listItem={list} i={i} />)}
+      </tbody>
+    </table>
+  );
 }
 
-export default ListGames;
+export default ListRankedGames;

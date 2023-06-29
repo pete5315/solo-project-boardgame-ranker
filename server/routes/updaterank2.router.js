@@ -137,25 +137,29 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
         }
       }
     }
-    await client.query(
-      `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
-      [currentMiddle1, currentBest, req.params.id]
-    );
-    await client.query(
-      `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
-      [currentMiddle2, currentBest, req.params.id]
-    );
+    if (currentMiddle1) {
+      await client.query(
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+        [currentMiddle1, currentBest, req.params.id]
+      );
+      await client.query(
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+        [currentWorst, currentMiddle1, req.params.id]
+      );
+    }
+    if (currentMiddle2) {
+      await client.query(
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+        [currentMiddle2, currentBest, req.params.id]
+      );
+      await client.query(
+        `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+        [currentWorst, currentMiddle2, req.params.id]
+      );
+    }
     await client.query(
       `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
       [currentWorst, currentBest, req.params.id]
-    );
-    await client.query(
-      `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
-      [currentWorst, currentMiddle1, req.params.id]
-    );
-    await client.query(
-      `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
-      [currentWorst, currentMiddle2, req.params.id]
     );
     await client.query("COMMIT");
     res.sendStatus(200);

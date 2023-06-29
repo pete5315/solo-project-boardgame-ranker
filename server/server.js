@@ -15,6 +15,7 @@ const addGameRouter = require('./routes/addgame.router');
 const randomGameRouter = require('./routes/randomgame.router');
 const updateRankRouter = require('./routes/updaterank2.router');
 const rankedListRouter = require('./routes/rankedlist.router');
+const finishedListRouter = require('./routes/finishedlist.router')
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -35,6 +36,7 @@ app.use('/api/addgame', addGameRouter);
 app.use('/api/randomgames', randomGameRouter);
 app.use('/api/updaterank', updateRankRouter);
 app.use('/api/rankedlist', rankedListRouter);
+app.use('/api/finishedlist', finishedListRouter);
 
 // Serve static files
 app.use(express.static('build'));
