@@ -41,61 +41,78 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
     );
   }
   let updatesNeeded = [currentMiddle1, currentMiddle2, currentWorst];
-
+  let resultsArray;
   try {
     await client.query("BEGIN");
-    let resultsArray = await client.query(
+    resultsArray = await client.query(
       `SELECT game_id, better_game_id FROM results
   WHERE list_id = $1;`,
       [req.params.id]
     );
-    resultsArray = resultsArray.rows;
-    console.log("resultsarray!!!!", resultsArray);
     //need current better thans for the current best
+    let currentBestResultsArray = await client.query(
+      `SELECT better_game_id FROM results
+      WHERE list_id = $1 AND game_id=$2;`,
+      [req.params.id, currentBest]
+    );
+    console.log("resultsarray!!!!", resultsArray);
+    resultsArray = resultsArray.rows;
+    currentBestResultsArray = currentBestResultsArray.rows;
     //need current better thans for the middle1
+    let currentMiddle1ResultsArray = await client.query(
+      `SELECT better_game_id FROM results
+      WHERE list_id = $1 AND game_id=$2;`,
+      [req.params.id, currentMiddle1]
+    );
+    currentMiddle1ResultsArray = currentMiddle1ResultsArray.rows;
     //need current better thans for the middle2
-
-    currentGames.push(currentBest);
-    for (let updateNeededInstance of updatesNeeded) {
-      if (updateNeededInstance !== null) {
-        for (let resultInstance of resultsArray) {
-          console.log(
-            "resultInstance.game_id is",
-            resultInstance.game_id,
-            "compared to currentBest.id",
-            currentBest
-          );
-          if (resultInstance.game_id === currentBest) {
-            console.log("found that it's better!", resultInstance);
-            await client.query(
-              `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${updateNeededInstance}, ${resultInstance.better_game_id}, ${listID});`
-            );
-          }
-        }
-        await client.query(
-          `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${updateNeededInstance}, ${currentBest}, ${listID});`
-        );
-      }
-    }
-    if (currentMiddle1 !== null) {
-      await client.query(
-        `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle1}, ${listID});`
-      );
-    }
-    if (currentMiddle2 !== null) {
-      await client.query(
-        `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle2}, ${listID});`
-      );
-    }
+    let currentMiddle2ResultsArray = await client.query(
+      `SELECT better_game_id FROM results
+      WHERE list_id = $1 AND game_id=$2;`,
+      [req.params.id, currentMiddle2]
+    );
+    currentMiddle2ResultsArray = currentMiddle2ResultsArray.rows;
+    console.log(
+      "currentbestarray",
+      currentBestResultsArray,
+      "currentMiddle1ResultsArray",
+      currentMiddle1ResultsArray,
+      "currentMiddle2ResultsArray",
+      currentMiddle2ResultsArray
+    );
     await client.query("COMMIT");
-    res.sendStatus(201);
   } catch (error) {
-    await client.query("ROLLBACK");
+    // await client.query("ROLLBACK");
     console.log("Error POST /api/randomgames", error);
     res.sendStatus(201);
   } finally {
     client.release();
   }
+  currentGames.push(currentBest);
+  for (let updateNeededInstance of updatesNeeded) {
+    if (updateNeededInstance !== null) {
+      for (let resultInstance of resultsArray) {
+        pool.query(
+          `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${updateNeededInstance}, ${resultInstance.better_game_id}, ${listID});`
+        );
+        pool.query(
+          `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${updateNeededInstance}, ${currentBest}, ${listID});`
+        );
+      }
+    }
+  }
+  if (currentMiddle1 !== null) {
+    pool.query(
+      `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle1}, ${listID});`
+    );
+  }
+
+  if (currentMiddle2 !== null) {
+    pool.query(
+      `INSERT INTO results (game_id, better_game_id, list_id) VALUES (${currentWorst}, ${currentMiddle2}, ${listID});`
+    );
+  }
+  res.sendStatus(201);
 });
 
 module.exports = router;

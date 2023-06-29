@@ -13,7 +13,7 @@ const userListRouter = require('./routes/userlist.router');
 const newListRouter = require('./routes/newlist.router');
 const addGameRouter = require('./routes/addgame.router');
 const randomGameRouter = require('./routes/randomgame.router');
-const updateRankRouter = require('./routes/updaterank.router');
+const updateRankRouter = require('./routes/updaterank2.router');
 const rankedListRouter = require('./routes/rankedlist.router');
 
 // Body parser middleware
