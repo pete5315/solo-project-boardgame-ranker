@@ -9,6 +9,7 @@ import getRandomGamesSaga from './get_random_games.saga'
 import sendCurrentRankSaga from './send_current_rank.saga';
 import rankedListSaga from './ranked_list.saga';
 import getFinishedListSaga from './finished_list.saga';
+import updateFinsihedListSaga from './alter_final_list.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -29,5 +30,6 @@ export default function* rootSaga() {
     sendCurrentRankSaga(),
     rankedListSaga(),
     getFinishedListSaga(),
+    updateFinsihedListSaga(),
   ]);
 }

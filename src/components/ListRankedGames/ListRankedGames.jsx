@@ -30,7 +30,7 @@ function ListRankedGames() {
         </tr>
       </thead>
       <tbody>
-        {finishedList && finishedList.map((list, i) => <RankedGameItem listItem={list} i={i} />)}
+        {finishedList && finishedList.map((list, i) => <RankedGameItem listItem={list} i={i} finishedList={finishedList} />)}
       </tbody>
     </table>
   );

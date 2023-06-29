@@ -18,7 +18,7 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
   const currentWorst = req.body.currentWorst;
   console.log("currentWorst", currentWorst);
   let currentMiddle1 = null;
-  let currentMiddle2;
+  let currentMiddle2 =  null;
   for (let randomGameInstance of req.body.randomGames) {
     if (
       randomGameInstance.id !== currentBest &&
