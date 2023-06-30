@@ -21,7 +21,7 @@ function* sendCurrentRank(action) {
     // with an id and username set the client-side user object to let
     // the client-side code know the user is logged in
     yield put ({type: 'UNSET_RANK'})
-    yield put ({type: 'GET_RANDOM_GAMES', payload: {currentList: action.payload.listID}})
+    yield put ({type: 'GET_RANDOM_GAMES', payload: {currentList: action.payload.listID, callbackHistory: action.payload.callbackHistory}})
 
   } catch (error) {
     console.log('User get request failed', error);

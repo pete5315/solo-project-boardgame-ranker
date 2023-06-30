@@ -8,6 +8,9 @@ function ListRankedGames() {
 
   const dispatch = useDispatch();
 
+
+  finishedList && console.log(finishedList);
+
   useEffect(() => {
     getRankedList();
   }, []);

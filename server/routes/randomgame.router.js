@@ -20,7 +20,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     );
     console.log("line 21");
     let gamesArray = await client.query(
-      `SELECT game.id, game.name FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
+      `SELECT game_junction.id, game.name FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
       [req.params.id]
     );
 
@@ -40,9 +40,10 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     );
     let returnedGames = [];
     //check if complete
-    console.log(((gamesLength + 1) / 2) * gamesLength)
-    if (((gamesLength - 1) / 2) * gamesLength === resultsArray.length) {
+    console.log(((gamesLength - 1) / 2) * gamesLength)
+    if (((gamesLength - 1) / 2) * gamesLength <= resultsArray.length) {
       returnedGames.push("complete");
+      console.log("added complete to returned games")
     } else {
       //if not complete
       let n = 4; //set up the number of games per page to its default

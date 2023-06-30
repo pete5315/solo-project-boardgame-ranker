@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom/cjs/react-router-dom';
 
 // worker Saga: will be fired on "FETCH_USER" actions
 function* randomGames(action) {
-  console.log(action.payload)
+  console.log(action)
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },
@@ -21,9 +21,10 @@ function* randomGames(action) {
     // with an id and username set the client-side user object to let
     // the client-side code know the user is logged in
     console.log(games.data)
+      console.log(action.payload)
     if (games.data[0]==='complete') {
       console.log('COMPLETE COMPLETE');
-      action.callbackHistory.push('/list')
+      action.payload.callbackHistory.push('/list')
     }
     yield put ({type:'SET_RANDOM_GAMES', payload:games.data});
 

@@ -1,5 +1,4 @@
 const finishedList = (state = [], action) => {
-  console.log(action);
   switch (action.type) {
     case 'SET_FINISHED_LIST':
       return [...action.payload];
