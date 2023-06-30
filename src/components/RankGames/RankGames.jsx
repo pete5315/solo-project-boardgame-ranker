@@ -5,8 +5,8 @@ import GameCard from "../GameCard/GameCard";
 
 function RankGames() {
   let dispatch = useDispatch();
-  const currentList = useSelector((store) => store.currentList);
   const randomGames = useSelector((store) => store.randomGames);
+  const currentList = useSelector((store) => store.currentList);
   const callbackHistory=useHistory();
 
   useEffect(() => {
