@@ -2,7 +2,7 @@ import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 
 // worker Saga: will be fired on "FETCH_USER" actions
-function* newList() {
+function* newList(action) {
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },
@@ -13,12 +13,15 @@ function* newList() {
     // allow the server session to recognize the user
     // If a user is logged in, this will return their information
     // from the server session (req.user)
-    const response = yield axios.get('/api/newlist/', config);
-
+    let response = yield axios.get('/api/newlist/', config);
+    response=response.data[0]
+    console.log('response', response);
     // now that the session has given us a user object
     // with an id and username set the client-side user object to let
     // the client-side code know the user is logged in
-    yield put({ type: 'SET_CURRENT_LIST', payload: response.data });
+    yield put({ type: 'SET_CURRENT_LIST', payload: response });
+    console.log("set current list finished");
+    yield action.payload.callbackHistory.push('/inputs')
   } catch (error) {
     console.log('User get request failed', error);
   }

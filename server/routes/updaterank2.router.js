@@ -18,7 +18,7 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
   const currentWorst = req.body.currentWorst;
   console.log("currentWorst", currentWorst);
   let currentMiddle1 = null;
-  let currentMiddle2 =  null;
+  let currentMiddle2 = null;
   for (let randomGameInstance of req.body.randomGames) {
     if (
       randomGameInstance.id !== currentBest &&
@@ -46,6 +46,9 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
     let betterThanCurrentMiddle1 = [];
     let betterThanCurrentMiddle2 = [];
     let betterThanCurrentWorst = [];
+    let currentMiddle1IsBetterThan = [];
+    let currentMiddle2IsBetterThan = [];
+    let currentWorstIsBetterThan = [];
     if (resultsArray.length > 0) {
       for (let result of resultsArray) {
         console.log(result);
@@ -60,6 +63,15 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
         }
         if (result.game_id === currentWorst) {
           betterThanCurrentWorst.push(result.better_game_id);
+        }
+        if (result.better_game_id === currentMiddle1) {
+          currentMiddle1IsBetterThan.push(result.better_game_id);
+        }
+        if (result.better_game_id === currentMiddle2) {
+          currentMiddle2BetterThan.push(result.better_game_id);
+        }
+        if (result.better_game_id === currentWorst) {
+          currentWorstIsBetterThan.push(result.better_game_id);
         }
       }
     }
@@ -95,6 +107,31 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
       }
     });
     betterThanCurrentWorst = uniqueIDs;
+    uniqueIDs = [];
+    currentMiddle1IsBetterThan.forEach((x) => {
+      if (!uniqueIDs.includes(x)) {
+        uniqueIDs.push(x);
+        console.log("failure");
+      }
+    });
+    currentMiddle1IsBetterThan = uniqueIDs;
+    uniqueIDs = [];
+    currentMiddle2IsBetterThan.forEach((x) => {
+      if (!uniqueIDs.includes(x)) {
+        uniqueIDs.push(x);
+        console.log("failure");
+      }
+    });
+    currentMiddle2IsBetterThan = uniqueIDs;
+    uniqueIDs = [];
+    currentWorstIsBetterThan.forEach((x) => {
+      if (!uniqueIDs.includes(x)) {
+        uniqueIDs.push(x);
+        console.log("failure");
+      }
+    });
+    currentWorstIsBetterThan = uniqueIDs;
+
     if (betterThanCurrentBest.length > 0) {
       for (let game of betterThanCurrentBest) {
         if (!betterThanCurrentMiddle1.includes(game.game_id)) {
@@ -117,7 +154,7 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
         }
       }
     }
-    if (betterThanCurrentBest.length > 0) {
+    if (betterThanCurrentMiddle1.length > 0) {
       for (let game of betterThanCurrentMiddle1) {
         if (!betterThanCurrentWorst.includes(game.game_id)) {
           await client.query(
@@ -127,7 +164,7 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
         }
       }
     }
-    if (betterThanCurrentBest.length > 0) {
+    if (betterThanCurrentMiddle2.length > 0) {
       for (let game of betterThanCurrentMiddle2) {
         if (!betterThanCurrentWorst.includes(game.game_id)) {
           await client.query(
@@ -161,6 +198,109 @@ router.post("/:id", rejectUnauthenticated, async (req, res) => {
       `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
       [currentWorst, currentBest, req.params.id]
     );
+    resultsArray = await client.query(
+      `SELECT game_id, better_game_id FROM results
+    WHERE list_id = $1;`,
+      [req.params.id]
+    );
+    //for each id in the currentmidle1isbetterthan array, i want to check if those ids have a relationship with currentBest
+    if (currentMiddle1IsBetterThan.length > 0) {
+      for (let worseGame of currentMiddle1IsBetterThan) {
+        console.log(worseGame);
+        resultsArrayforEach((x) => {
+          let skipX = 0;
+          if (
+            x.better_game_id === currentBest &&
+            x.game_id === worseGame.game_id
+          ) {
+            skipX = 1;
+            console.log("skip 213");
+          }
+        });
+        if (skipX === 0) {
+          await client.query(
+            `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+            [worseGame.game_id, currentBest, req.params.id]
+          );
+        }
+      }
+    }
+    if (currentMiddle2IsBetterThan.length > 0) {
+      for (let worseGame of currentMiddle2IsBetterThan) {
+        console.log(worseGame);
+        resultsArrayforEach((x) => {
+          let skipX = 0;
+          if (
+            x.better_game_id === currentBest &&
+            x.game_id === worseGame.game_id
+          ) {
+            skipX = 1;
+            console.log("skip 213");
+          }
+        });
+        if (skipX === 0) {
+          await client.query(
+            `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+            [worseGame.game_id, currentBest, req.params.id]
+          );
+        }
+      }
+    }
+    if (currentWorstIsBetterThan.length > 0) {
+      for (let worseGame of currentWorstIsBetterThan) {
+        console.log(worseGame);
+        resultsArrayforEach((x) => {
+          let skipX = 0;
+          if (
+            x.better_game_id === currentBest &&
+            x.game_id === worseGame.game_id
+          ) {
+            skipX = 1;
+            console.log("skip 213");
+          }
+        });
+        if (skipX === 0) {
+          await client.query(
+            `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+            [worseGame.game_id, currentBest, req.params.id]
+          );
+        }
+        console.log(worseGame);
+        resultsArrayforEach((x) => {
+          let skipX = 0;
+          if (
+            x.better_game_id === currentMiddle1 &&
+            x.game_id === worseGame.game_id
+          ) {
+            skipX = 1;
+            console.log("skip 213");
+          }
+        });
+        if (skipX === 0) {
+          await client.query(
+            `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+            [worseGame.game_id, currentMiddle1, req.params.id]
+          );
+        }
+        console.log(worseGame);
+        resultsArrayforEach((x) => {
+          let skipX = 0;
+          if (
+            x.better_game_id === currentMiddle2 &&
+            x.game_id === worseGame.game_id
+          ) {
+            skipX = 1;
+            console.log("skip 213");
+          }
+        });
+        if (skipX === 0) {
+          await client.query(
+            `INSERT INTO results (game_id, better_game_id, list_id) VALUES ($1, $2, $3);`,
+            [worseGame.game_id, currentMiddle2, req.params.id]
+          );
+        }
+      }
+    }
     await client.query("COMMIT");
     res.sendStatus(200);
   } catch (error) {

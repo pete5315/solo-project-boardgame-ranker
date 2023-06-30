@@ -1,4 +1,5 @@
 const currentList = (state = null, action) => {
+  console.log(action);
   switch (action.type) {
     case 'SET_CURRENT_LIST':
       return action.payload;

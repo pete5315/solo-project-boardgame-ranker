@@ -14,12 +14,13 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     req.body.id = 1;
   }
   console.log("add game data: ", req.body);
+  console.log("reqbodyid", req.body.id[0])
   pool
     .query(
       `SELECT name, url FROM game
     JOIN game_junction ON game_junction.game_id=game.id
     JOIN list ON list_id=$1;`,
-      [req.body.id]
+      [req.body.id[0]]
     )
     .then((results1) => {
       console.log(results1.rows);
@@ -30,6 +31,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       // } else {
       //   oldArray.push(req.body.newGame);
       // }
+      console.log("34", req.body.newGame)
       pool
         .query(
           `INSERT INTO game (name, url)
@@ -39,6 +41,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
           [req.body.newGame, null]
         )
         .then((results2) => {
+          console.log("44", req.body.id, results2.rows[0].id)
           pool
             .query(
               `INSERT INTO game_junction (list_id, game_id)
@@ -47,13 +50,14 @@ router.post("/", rejectUnauthenticated, (req, res) => {
             `,
               [req.body.id, results2.rows[0].id]
             )
-            .then((results2) => {
+            .then((results3) => {
+              console.log(req.body.id)
               pool
                 .query(
                   `SELECT name, url FROM game
               JOIN game_junction ON game_junction.game_id=game.id
               JOIN list ON list_id=$1;`,
-                  [req.body.id]
+                  [req.body.id[0]]
                 )
                 .then((results3) =>
                   res.send({ rows: results3.rows, id: req.body })
