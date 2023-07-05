@@ -1,0 +1,29 @@
+.image {
+  min-height: 50px;
+  min-width: 50px;
+  max-height: 50px;
+  max-width: 50px;
+  float: left;
+}
+
+.listImage {
+  text-align: center;
+  min-height: 50px;
+  min-width: 500px;
+  max-height: 50px;
+  max-width: 500px;
+  margin: auto;
+  line-height: 50px;
+}
+
+.icon {
+  line-height: 50px;
+  margin: auto;
+  min-height: 50px;
+  max-height: 50px;
+  display: flex;
+}
+
+.thirteen {
+  line-height: 13px;
+}

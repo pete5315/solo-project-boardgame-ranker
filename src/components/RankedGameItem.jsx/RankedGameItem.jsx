@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import finishedList from "../../redux/reducers/finished_list.reducer";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import IconButton from "@mui/material/IconButton";
+import "./RankedGameItem.css";
 
 function RankedGamesItem(props) {
   console.log(props.i);
@@ -34,19 +36,28 @@ function RankedGamesItem(props) {
   return (
     <tr key={props.i}>
       <td>{props.i + 1}</td>
+      <td>
+        <img className="image" src={props.listItem.thumbnail} />
+      </td>
       <td>{props.listItem.name}</td>
       <td>
         {props.i === 0 ? (
           <div></div>
         ) : (
-          <button onClick={handleUp}>MOVE UP</button>
+          <IconButton size="small">
+            <ArrowUpwardIcon onClick={handleUp}>MOVE UP</ArrowUpwardIcon>
+          </IconButton>
         )}
       </td>
       <td>
         {props.i === props.finishedList.length - 1 ? (
           <div></div>
         ) : (
-          <button onClick={handleDown}>MOVE DOWN</button>
+          <IconButton size="small">
+            <ArrowDownwardIcon onClick={handleDown}>
+              MOVE DOWN
+            </ArrowDownwardIcon>
+          </IconButton>
         )}
       </td>
     </tr>

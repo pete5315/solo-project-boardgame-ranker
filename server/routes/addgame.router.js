@@ -14,13 +14,13 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     req.body.id = 1;
   }
   console.log("add game data: ", req.body);
-  console.log("reqbodyid", req.body.id[0])
+  console.log("reqbodyid", req.body.id)
   pool
     .query(
       `SELECT name, url FROM game
     JOIN game_junction ON game_junction.game_id=game.id
     JOIN list ON list_id=$1;`,
-      [req.body.id[0]]
+      [req.body.id]
     )
     .then((results1) => {
       console.log(results1.rows);
@@ -34,27 +34,27 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       console.log("34", req.body.newGame)
       pool
         .query(
-          `INSERT INTO game (name, url)
-          VALUES ($1, $2)
+          `INSERT INTO game (name, url, thumbnail)
+          VALUES ($1, $2, $3)
           RETURNING id;
           `,
-          [req.body.newGame, null]
+          [req.body.newGame, req.body.url, req.body.thumbnail]
         )
-        .then((results2) => {
-          console.log("44", req.body.id, results2.rows[0].id)
+        .then((results1) => {
+          console.log("44", req.body.id, results1.rows.id)
           pool
             .query(
               `INSERT INTO game_junction (list_id, game_id)
             VALUES ($1, $2)
             RETURNING id;
             `,
-              [req.body.id, results2.rows[0].id]
+              [req.body.id, results1.rows[0].id]
             )
-            .then((results3) => {
+            .then((results2) => {
               console.log(req.body.id)
               pool
                 .query(
-                  `SELECT name, url FROM game
+                  `SELECT name, url, thumbnail FROM game
               JOIN game_junction ON game_junction.game_id=game.id
               JOIN list ON list_id=$1;`,
                   [req.body.id[0]]
@@ -86,12 +86,13 @@ router.get("/:id", rejectUnauthenticated, (req, res) => {
   if (req.params.id === null) {
     req.params.id = 1;
   }
-  console.log("get reqparams", req.params.id);
+  console.log("get reqparams89", req.params.id);
   pool
     .query(
-      `SELECT name, url FROM game
+      `SELECT game_junction.id, name, url, thumbnail FROM game
       JOIN game_junction ON game_junction.game_id=game.id
-      WHERE game_junction.list_id=$1;`,
+      WHERE game_junction.list_id=$1
+      ORDER BY game_junction.id ASC;`,
       [req.params.id]
     )
     .then((results) => {

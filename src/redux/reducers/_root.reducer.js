@@ -7,6 +7,9 @@ import games from './games.reducer';
 import randomGames from './random_games.reducer'
 import currentRank from './current_rank.reducer';
 import finishedList from './finished_list.reducer';
+import bggProcessing from './bgg_processing.reducer';
+import progress from './progress.reducer';
+import currentStep from './current_step.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -23,6 +26,9 @@ const rootReducer = combineReducers({
   randomGames,
   currentRank,
   finishedList,
+  bggProcessing,
+  progress,
+  currentStep,
 });
 
 export default rootReducer;

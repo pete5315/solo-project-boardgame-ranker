@@ -24,10 +24,9 @@ function UserLists() {
     <table>
       <thead>
         <tr>
-          <th>head1</th>
-          <th>head1</th>
-          <th>head1</th>
-          <th>head1</th>
+          <th>Status</th>
+          <th># of games</th>
+          <th>List modified</th>
         </tr>
       </thead>
       <tbody>

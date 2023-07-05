@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import RankedGameItem from "../RankedGameItem/RankedGameItem";
+import RankedGameItem from "../RankedGameItem.jsx/RankedGameItem";
+import "./ListRankedGames.css"
 
 function ListRankedGames() {
   const finishedList = useSelector((store) => store.finishedList);
@@ -13,6 +14,7 @@ function ListRankedGames() {
 
   useEffect(() => {
     getRankedList();
+    dispatch({ type: "SET_CURRENT_STEP", payload: 2 });
   }, []);
 
   function getRankedList() {
@@ -26,10 +28,10 @@ function ListRankedGames() {
     <table>
       <thead>
         <tr>
-          <th>head1</th>
-          <th>head1</th>
-          <th>head1</th>
-          <th>head1</th>
+          <th></th>
+          <th>Title</th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>

@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/:id", rejectUnauthenticated, async (req, res) => {
   const client = await pool.connect();
-  console.log(req.params.id);
+  // console.log(req.params.id);
   try {
     await client.query("BEGIN");
     let resultsArray = await client.query(
@@ -18,30 +18,35 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     WHERE list_id = $1;`,
       [req.params.id]
     );
-    console.log("line 21");
+    // console.log("line 21");
     let gamesArray = await client.query(
-      `SELECT game_junction.id, game.name FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
+      `SELECT game_junction.id, game.name, game.url, game.thumbnail FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
       [req.params.id]
     );
 
     resultsArray = resultsArray.rows;
     gamesArray = gamesArray.rows;
-    console.log("games array", gamesArray);
-    console.log("results array", resultsArray);
+    // console.log("games array", gamesArray);
+    // console.log("results array", resultsArray);
     let gamesLength = gamesArray.length;
     let returnedGamesNumber = [-1];
     let skippedGames = [];
 
-    console.log(
-      "results length",
-      resultsArray.length,
-      "games length",
-      gamesLength
-    );
+    // console.log(
+    //   "results length",
+    //   resultsArray.length,
+    //   "games length",
+    //   gamesLength
+    // );
     let returnedGames = [];
     //check if complete
-    console.log(((gamesLength - 1) / 2) * gamesLength)
+    // console.log(((gamesLength - 1) / 2) * gamesLength)
     if (((gamesLength - 1) / 2) * gamesLength <= resultsArray.length) {
+      await client.query(
+        `UPDATE list
+        SET completed = true
+        WHERE id=$1;`,
+        [req.params.id])
       returnedGames.push("complete");
       console.log("added complete to returned games")
     } else {
@@ -51,7 +56,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
       for (let i = 0; i < n; i++) {
         let rn = Math.floor(Math.random() * gamesArray.length); //rn is randomNumber
         let currentGame = gamesArray[rn];
-        console.log("current game", currentGame);
+        // console.log("current game", currentGame);
         let skip = 0;
         //check if the default is too high and set it to compare to 1 or 2 instead of 3 and skip if it's already the best
         if (i === 0) {
@@ -61,7 +66,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
             [currentGame.id, req.params.id]
           );
           nCheck = nCheck.rows[0].count;
-          console.log("gamesArray.length-1-nCheck", gamesLength - 1 - nCheck);
+          // console.log("gamesArray.length-1-nCheck", gamesLength - 1 - nCheck);
           if (gamesLength - 1 - nCheck <= 0) {
             skippedGames.push(currentGame.id);
             skip = -1;
@@ -70,14 +75,14 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
               n = gamesLength - nCheck;
             }
           }
-
         }
-        if (skippedGames.length===gamesArray.length) {
-          i=n+1;
-          console.log("HEY LOOK OVER HERE HEY HEY HEY")
-        }        console.log("skipped games", skippedGames);
-        console.log("line 71", rn, currentGame, returnedGames);
-        console.log("l", l);
+        if (skippedGames.length === gamesArray.length) {
+          i = n + 1;
+          // console.log("HEY LOOK OVER HERE HEY HEY HEY")
+        }
+        // console.log("skipped games", skippedGames);
+        // console.log("line 71", rn, currentGame, returnedGames);
+        // console.log("l", l);
         if (!skippedGames.includes(currentGame.id)) {
           for (let j = 0; j < resultsArray.length; j++) {
             let x = resultsArray[j];
@@ -86,12 +91,12 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
               let alreadyAddedGame = returnedGames[i];
               if (alreadyAddedGame.id === x.game_id) {
                 if (currentGame.id === x.better_game_id) {
-                  console.log(
-                    "skipped!",
-                    currentGame.name,
-                    x,
-                    alreadyAddedGame
-                  );
+                  // console.log(
+                  //   "skipped!",
+                  //   currentGame.name,
+                  //   x,
+                  //   alreadyAddedGame
+                  // );
                   skip = -1;
                   skippedGames.push(currentGame.id);
                   j = resultsArray.length;
@@ -101,7 +106,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
                   let alreadyAddedGame = returnedGames[k];
                   if (currentGame.id === x.game_id) {
                     if (alreadyAddedGame.id === x.better_game_id) {
-                      console.log("skipped!", currentGame.name);
+                      // console.log("skipped!", currentGame.name);
                       skip = -1;
                       skippedGames.push(currentGame.id);
                       j = resultsArray.length;
@@ -112,7 +117,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
             }
           }
         } else {
-          console.log("we skipped a game");
+          // console.log("we skipped a game");
           skip = -1;
         }
         let skipCheck;
@@ -122,9 +127,13 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
           skipCheck = currentGame.id;
         }
         if (!returnedGamesNumber.includes(skipCheck)) {
-          console.log("line 108", skipCheck);
-          console.log("added ", currentGame.name);
-          returnedGames.push({ name: currentGame.name, id: currentGame.id });
+          // console.log("line 108", skipCheck);
+          // console.log("added ", currentGame.name);
+          returnedGames.push({
+            name: currentGame.name,
+            id: currentGame.id,
+            url: currentGame.url,
+          });
           returnedGamesNumber.push(currentGame.id);
           skippedGames.push(currentGame.id);
           let gameArray1 = await client.query(
@@ -133,47 +142,47 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
           );
           gameArray1 = gameArray1.rows;
           for (let x of gameArray1) {
-            console.log(
-              "for ",
-              currentGame.name,
-              "better games are ",
-              x.better_game_id
-            );
+            // console.log(
+            //   "for ",
+            //   currentGame.name,
+            //   "better games are ",
+            //   x.better_game_id
+            // );
             skippedGames.push(x.better_game_id);
           }
-          
+
           let gameArray2 = await client.query(
             `SELECT results.game_id FROM results WHERE results.list_id=$1 AND results.better_game_id=$2;`,
             [req.params.id, currentGame.id]
           );
           gameArray2 = gameArray2.rows;
-          console.log(gameArray2)
+          // console.log(gameArray2);
           for (let x of gameArray2) {
-            console.log(
-              "for ",
-              currentGame.name,
-              "worse games are ",
-              x.game_id
-            );
+            // console.log(
+            //   "for ",
+            //   currentGame.name,
+            //   "worse games are ",
+            //   x.game_id
+            // );
             skippedGames.push(x.game_id);
           }
-          console.log(returnedGamesNumber);
-          console.log(returnedGames);
-          skippedGames=[...new Set(skippedGames)];
-          console.log("line 155, skipped games", skippedGames)
+          // console.log(returnedGamesNumber);
+          // console.log(returnedGames);
+          skippedGames = [...new Set(skippedGames)];
+          // console.log("line 155, skipped games", skippedGames);
           l++;
         } else {
-          console.log(
-            "we skipped adding a game",
-            currentGame.name,
-            returnedGames
-          );
+          // console.log(
+          //   "we skipped adding a game",
+          //   currentGame.name,
+          //   returnedGames
+          // );
           i--;
           l++;
           if (l > 1000) {
             i++;
           }
-          console.log(l);
+          // console.log(l);
         }
       }
     }
@@ -195,4 +204,26 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     client.release();
   }
 });
+
+router.get("/percent/:id", rejectUnauthenticated, async (req, res) => {
+  try {
+    let gamesArray = await pool.query(
+      `SELECT game_junction.id, game.name, game.url, game.thumbnail FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
+      [req.params.id]
+    );
+    let gamesLength = gamesArray.rows.length;
+    let denominator = ((gamesLength - 1) / 2) * gamesLength;
+    console.log("denominator", ((gamesLength - 1) / 2) * gamesLength);
+    let numerator = await pool.query(
+      `SELECT COUNT(results.id) FROM results WHERE list_id=$1;`,
+      [req.params.id]
+    );
+    console.log("numerator", numerator.rows[0].count);
+    res.send(`${(numerator.rows[0].count) / denominator}`);
+  } catch (error) {
+    console.log("Error POST /api/randomgames", error);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

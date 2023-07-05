@@ -13,10 +13,9 @@ function UserListItem({ list }) {
 
   return (
   <tr key={list.id}  onClick={setCurrentList} >
+    <td><Link to="/inputs"><div>{list.completed ? "Complete" : "Incomplete"}</div></Link></td>
+    <td>{list.length && list.length}</td>
     <td>{list.date}</td>
-    <td>{list.games_array && list.games_array.length}</td>
-    <td>{list.completed ? "Complete" : "Incomplete"}</td>
-    <td><Link to="/inputs"><div>link</div></Link></td>
   </tr>)
 }
 

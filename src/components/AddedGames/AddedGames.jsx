@@ -3,18 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import GamesListItem from "../GamesListItem/GamesListItem"
 
 function AddedGames() {
-  useEffect(() => {
-    getGamesLists();
-  }, []);
-
-  let dispatch = useDispatch();
-
+  let listNumber = useSelector((store) => store.currentList);
   const games = useSelector((store) => store.games);
-  function getGamesLists() {
-    // dispatch({
-    //   type: "FETCH_GAMES_LISTS",
-    // });
-  }
 
   if (games && !games[0]) {
     return
@@ -24,6 +14,7 @@ function AddedGames() {
     <table>
       <thead>
         <tr>
+          <th></th>
           <th>Game name</th>
         </tr>
       </thead>

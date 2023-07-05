@@ -12,7 +12,7 @@ router.delete("/:id", rejectUnauthenticated, (req, res) => {
   if (req.params.id === null) {
     req.params.id = 1;
   }
-  console.log("get reqparams", req.params.id);
+  console.log("get reqparams15", req.params.id);
   pool
     .query(
       `DELETE FROM game_junction
