@@ -14,7 +14,7 @@ function AddGames() {
 
   useEffect(() => {
     checkIfInList();
-    dispatch({ type: "SET_CURRENT_STEP", payload: 0 });
+   dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
   }, []);
 
   function checkIfInList() {

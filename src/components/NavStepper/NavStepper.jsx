@@ -61,8 +61,8 @@ export default function HorizontalNonLinearStepper() {
     setCompleted({});
   };
 
-  const steps = ["Add games", "Rank Games", "Ranked List"];
-  const address = ["/inputs", "/rank", "/list"];
+  const steps = ["Select List", "Add games", "Rank Games", "Ranked List"];
+  const address = ["/user", "/inputs", "/rank", "/list"];
 
   function handleClick(label) {
     console.log("hello");
@@ -76,10 +76,22 @@ export default function HorizontalNonLinearStepper() {
           const stepProps = {};
           const labelProps = {};
           return (
-            <Step key={label} {...stepProps}>
+            <Step key={label} {...stepProps} sx={{
+              '& .MuiStepLabel-root .Mui-completed': {
+                color: 'grey.500', // circle color (COMPLETED)
+              },
+              '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
+                {
+                  color: 'grey.500', // Just text label (COMPLETED)
+                },
+              '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+                {
+                  color: 'common.white', // Just text label (ACTIVE)
+                },
+            }}>
               <Link to={address[index]}>
                 <Button onClick={() => handleNext(index)} sx={{ mr: 1 }}>
-                  <StepLabel {...labelProps}>
+                  <StepLabel {...labelProps} >
                     <div>{label}</div>
                   </StepLabel>
                 </Button>

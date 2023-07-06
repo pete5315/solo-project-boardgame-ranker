@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom/";
-import GameCard from "../GameCard/GameCard";
 import Grid from "@mui/material/Grid";
 import FlipCard from "../FlipCard/FlipCard";
 import "./RankGames.css";
@@ -17,7 +16,7 @@ function RankGames() {
 
   useEffect(() => {
     getARandomGame();
-    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
+    // dispatch({ type: "SET_CURRENT_STEP", payload: 2 });
   }, []);
 
   function getARandomGame() {

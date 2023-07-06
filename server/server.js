@@ -18,6 +18,7 @@ const rankedListRouter = require('./routes/newlist.router');
 const finishedListRouter = require('./routes/finishedlist.router')
 const editFinishedListRouter = require('./routes/editfinishedlist.router')
 const deleteGameRouter = require('./routes/deletegame.router')
+const deleteListRouter = require('./routes/deletelist.router')
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -41,6 +42,7 @@ app.use('/api/rankedlist', rankedListRouter);
 app.use('/api/finishedlist', finishedListRouter);
 app.use('/api/editfinishedlist', editFinishedListRouter);
 app.use('/api/deletegame', deleteGameRouter);
+app.use('/api/deletelist', deleteListRouter);
 
 // Serve static files
 app.use(express.static('build'));

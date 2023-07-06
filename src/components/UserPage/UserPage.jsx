@@ -1,25 +1,27 @@
-import React from 'react';
-import LogOutButton from '../LogOutButton/LogOutButton';
-import {useDispatch, useSelector} from 'react-redux';
-import UserLists from '../UserLists/UserLists'
-import { useHistory } from 'react-router-dom/';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import UserLists from "../UserLists/UserLists";
+import { useHistory } from "react-router-dom/";
+import "./UserPage.css";
 
 function UserPage() {
-  // this component doesn't do much to start, just renders some user reducer info to the DOM
   const user = useSelector((store) => store.user);
-  const callbackHistory=useHistory();
-  let dispatch=useDispatch();
+  const callbackHistory = useHistory();
+  let dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: "SET_CURRENT_STEP", payload: 0 });
+  }, []);
+
   function newList() {
     dispatch({
-      type:"SET_NEW_LIST",
+      type: "SET_NEW_LIST",
       payload: { callbackHistory },
-    })
+    });
   }
 
-
-
   return (
-    <div className="container">
+    <div className="container text-color">
       <h2>Welcome, {user.username}!</h2>
       {/* <p>Your ID is: {user.id}</p> */}
       <button onClick={newList}>Create a new list!</button>

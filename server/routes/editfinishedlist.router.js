@@ -9,6 +9,7 @@ const userStrategy = require("../strategies/user.strategy");
 const router = express.Router();
 
 // Handles Ajax request for user information if user is authenticated
+
 router.put("/:id/:better/:worse", rejectUnauthenticated, async (req, res) => {
   const client = await pool.connect();
   console.log(

@@ -25,7 +25,6 @@ function* newGame(action) {
     // the client-side code know the user is logged in
 
 
-    // yield put({ type: 'SET_CURRENT_LIST', payload: response.data });
   } catch (error) {
     console.log('User get request failed', error);
   }

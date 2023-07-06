@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import LogOutButton from "../LogOutButton/LogOutButton";
 import "./Nav.css";
-import { useSelector } from "react-redux";
 import NavStepper from "../NavStepper/NavStepper";
+import { useDispatch, useSelector } from "react-redux";
+
 
 function Nav() {
   const user = useSelector((store) => store.user);
-
+  let dispatch=useDispatch();
   return (
     <div className="nav">
       <div>
@@ -47,12 +47,15 @@ function Nav() {
             <Link className="navLink" to="/list">
               List
             </Link> */}
-
             <Link className="navLink" to="/about">
               About Page
             </Link>
-
-            <LogOutButton className="navLink" />
+            <button
+              className="navLink button"
+              onClick={() => dispatch({ type: "LOGOUT" })}
+            >
+              Log Out
+            </button>
           </>
         )}
 
@@ -60,7 +63,9 @@ function Nav() {
           About
         </Link> */}
       </div>
+      
     </div>
+    
   );
 }
 

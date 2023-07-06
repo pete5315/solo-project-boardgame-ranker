@@ -16,26 +16,10 @@ function GameCard(props) {
   const currentRank = useSelector((store) => store.currentRank);
   const randomGames = useSelector((store) => store.randomGames);
   const currentList = useSelector((store) => store.currentList);
-  let [width, setWidth] = useState(200);
-  let [best, setDOMBest] = useState(false);
-  let [worst, setDOMWorst] = useState(false);
+  const [best, setDOMBest] = useState(false);
+  const [worst, setDOMWorst] = useState(false);
   const callbackHistory = useHistory();
   const [flip, setFlip] = useState(false);
-
-  const getMeta = (url, cb) => {
-    const img = new Image();
-    img.onload = () => cb(null, img);
-    img.onerror = (err) => cb(err);
-    img.src = url;
-  };
-
-  // Use like:
-  useEffect(() => {
-    getMeta("https://i.stack.imgur.com/qCWYU.jpg", (err, img) => {
-      setWidth((img.naturalWidth / img.naturalHeight) * 180);
-      console.log(img.naturalWidth, img.naturalHeight);
-    });
-  });
 
   function setBest() {
     console.log(props.game.id);
@@ -92,7 +76,7 @@ function GameCard(props) {
         },
       });
     }
-  } // console.log("Best is ", best, " and worst is ", worst);
+  }
   function removeGame() {
     dispatch({
       type: "DELETE_GAME",
@@ -108,9 +92,6 @@ function GameCard(props) {
   return (
     <Grid item padding={2} className="absoluteGrid" sx={{ p: 0 }}>
       <div></div>
-      {/* {best || worst ? ( */}
-      {/* <div>{best ? <div>best</div> : <div>worst</div>}</div> */}
-      {/* ) : ( */}
       <Card
         elevation={5}
         sx={{
@@ -125,7 +106,18 @@ function GameCard(props) {
         className="mainCard"
       >
         <CardActions>
-          <Button variant="contained" sx={{ width: 330 }} onClick={setBest}>
+          <Button
+            variant="contained"
+            sx={{
+              width: 330,
+              backgroundColor: "green",
+              "&:hover": {
+                width: 330,
+                backgroundColor: "rgb(0, 108, 0)",
+              },
+            }}
+            onClick={setBest}
+          >
             best
           </Button>
         </CardActions>
@@ -143,15 +135,34 @@ function GameCard(props) {
           <Typography>{props.game.name}</Typography>
         </CardContent>
         <CardActions>
-          <Button variant="contained" sx={{ width: 330 }} onClick={setWorst}>
+          <Button
+            variant="contained"
+            sx={{
+              width: 330,
+              backgroundColor: "rgb(220, 0, 0)",
+              "&:hover": {
+                width: 330,
+                backgroundColor: "rgb(200, 0, 0)",
+              },
+            }}
+            onClick={setWorst}
+          >
             worst
           </Button>
-          <Button variant="contained" onClick={removeGame}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "grey",
+              "&:hover": {
+                backgroundColor: "rgb(108, 108, 108)",
+              },
+            }}
+            onClick={removeGame}
+          >
             <DeleteIcon></DeleteIcon>
           </Button>
         </CardActions>
       </Card>
-      {/* )} */}
     </Grid>
   );
 }

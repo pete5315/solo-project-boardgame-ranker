@@ -14,7 +14,7 @@ function ListRankedGames() {
 
   useEffect(() => {
     getRankedList();
-    dispatch({ type: "SET_CURRENT_STEP", payload: 2 });
+    dispatch({ type: "SET_CURRENT_STEP", payload: 3 });
   }, []);
 
   function getRankedList() {

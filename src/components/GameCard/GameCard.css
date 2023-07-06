@@ -17,14 +17,14 @@
 } */
 
 .bestClass {
-  background-color: green;
+  background-color: rgb(0, 128, 0);
   opacity: 50%;
   z-index: 1;
   position:relative;
 }
 
 .worstClass {
-  background-color: red;
+  background-color: rgb(255, 0, 0);
   opacity: 50%;
   z-index: 1;
     position:relative;
