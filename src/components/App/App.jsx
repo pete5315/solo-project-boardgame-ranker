@@ -24,7 +24,7 @@ import AddGames from "../AddGames/AddGames";
 import RankGames from "../RankGames/RankGames";
 import ListRankedGames from "../ListRankedGames/ListRankedGames";
 
-import Divider from '@mui/material/Divider';
+import Divider from "@mui/material/Divider";
 
 function App() {
   const dispatch = useDispatch();
@@ -92,16 +92,14 @@ function App() {
               // If the user is already logged in,
               // redirect to the /user page
               <Redirect to="/user" />
-            ) : (
+            ) : // Otherwise, show the login page
+            !listComplete ? (
               // Otherwise, show the login page
-              !listComplete ? (
-                // Otherwise, show the login page
-                <RankGames />
-              ) : (
-                // If the user is already logged in,
-                // redirect to the /user page
-                <Redirect to="/list" />
-              )
+              <RankGames />
+            ) : (
+              // If the user is already logged in,
+              // redirect to the /user page
+              <Redirect to="/list" />
             )}
           </ProtectedRoute>
 
@@ -114,9 +112,13 @@ function App() {
               // If the user is already logged in,
               // redirect to the /user page
               <Redirect to="/user" />
-            ) : (
+            ) : listComplete ? (
               // Otherwise, show the login page
               <ListRankedGames />
+            ) : (
+              // If the user is already logged in,
+              // redirect to the /user page
+              <Redirect to="/rank" />
             )}
           </ProtectedRoute>
 
