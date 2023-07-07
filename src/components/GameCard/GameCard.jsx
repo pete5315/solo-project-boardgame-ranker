@@ -20,61 +20,71 @@ function GameCard(props) {
   const [worst, setDOMWorst] = useState(false);
   const callbackHistory = useHistory();
   const [flip, setFlip] = useState(false);
+  const currentBest = currentRank.best;
+  const currentWorst = currentRank.worst;
 
   function setBest() {
     console.log(props.game.id);
-    setDOMBest(true);
-    setFlip(!flip);
-    if (currentRank.worst === null) {
-      dispatch({
-        type: "SET_CURRENT_RANK",
-        payload: {
-          ...currentRank,
-          best: props.game.id,
-          randomGames,
-          listID: currentList.id,
-        },
-      });
+    if (currentBest === props.game.id) {
+      dispatch({ type: "UNSET_BEST" });
     } else {
-      console.log("we have a current best");
-      dispatch({
-        type: "SEND_CURRENT_RANK",
-        payload: {
-          ...currentRank,
-          best: props.game.id,
-          randomGames,
-          listID: currentList.id,
-          callbackHistory,
-        },
-      });
+      setDOMBest(true);
+      setFlip(!flip);
+      if (currentRank.worst === null) {
+        dispatch({
+          type: "SET_CURRENT_RANK",
+          payload: {
+            ...currentRank,
+            best: props.game.id,
+            randomGames,
+            listID: currentList.id,
+          },
+        });
+      } else {
+        console.log("we have a current best");
+        dispatch({
+          type: "SEND_CURRENT_RANK",
+          payload: {
+            ...currentRank,
+            best: props.game.id,
+            randomGames,
+            listID: currentList.id,
+            callbackHistory,
+          },
+        });
+      }
     }
   }
   function setWorst() {
     console.log(props.game.id);
-    setDOMWorst(true);
-    setFlip(!flip);
-    if (!(currentRank.best === null)) {
-      console.log("we have a current worst");
-      dispatch({
-        type: "SEND_CURRENT_RANK",
-        payload: {
-          ...currentRank,
-          worst: props.game.id,
-          listID: currentList.id,
-          callbackHistory,
-        },
-      });
+    if (currentWorst === props.game.id) {
+      dispatch({ type: "UNSET_WORST" });
     } else {
-      dispatch({
-        type: "SET_CURRENT_RANK",
-        payload: {
-          ...currentRank,
-          worst: props.game.id,
-          randomGames,
-          callbackHistory,
-          listID: currentList.id,
-        },
-      });
+      setDOMWorst(true);
+      setFlip(!flip);
+      if (!(currentRank.best === null)) {
+        console.log("we have a current worst");
+        dispatch({
+          type: "SEND_CURRENT_RANK",
+          payload: {
+            ...currentRank,
+            worst: props.game.id,
+            listID: currentList.id,
+            callbackHistory,
+          },
+        });
+      } else {
+        dispatch({
+          type: "SET_CURRENT_RANK",
+          payload: {
+            ...currentRank,
+            worst: props.game.id,
+            randomGames,
+            callbackHistory,
+            listID: currentList.id,
+          },
+        });
+      }
     }
   }
   function removeGame() {
@@ -101,6 +111,12 @@ function GameCard(props) {
           maxHeight: 350,
           p: 2,
           my: 0.5,
+          backgroundColor:
+            currentBest === props.game.id
+              ? "rgb(153, 255, 153)"
+              : currentWorst === props.game.id
+              ? "rgb(255, 141, 141)"
+              : "white",
         }}
         key={props.i}
         className="mainCard"
@@ -118,7 +134,7 @@ function GameCard(props) {
             }}
             onClick={setBest}
           >
-            best
+            {currentBest===props.game.id ? 'undo' : 'best'}
           </Button>
         </CardActions>
         <CardMedia
@@ -147,7 +163,7 @@ function GameCard(props) {
             }}
             onClick={setWorst}
           >
-            worst
+            {currentWorst===props.game.id ? 'undo' : 'worst'}
           </Button>
           <Button
             variant="contained"
