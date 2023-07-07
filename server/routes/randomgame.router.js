@@ -13,14 +13,21 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
   // console.log(req.params.id);
   try {
     await client.query("BEGIN");
+    console.log(req.body);
     let resultsArray = await client.query(
-      `SELECT game_id, better_game_id FROM results
+      `SELECT game_id, better_game_id 
+    FROM results
     WHERE list_id = $1;`,
       [req.params.id]
     );
     // console.log("line 21");
+    console.log("req.params.id24", req.params.id)
+
     let gamesArray = await client.query(
-      `SELECT game_junction.id, game.name, game.url, game.thumbnail FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
+      `SELECT game_junction.id, game.name, game.url, game.thumbnail 
+    FROM game 
+    JOIN game_junction ON game_junction.game_id=game.id 
+    WHERE game_junction.list_id=$1;`,
       [req.params.id]
     );
 
@@ -39,6 +46,7 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
     //   gamesLength
     // );
     let returnedGames = [];
+    console.log("req.params.id", req.params.id)
     //check if complete
     // console.log(((gamesLength - 1) / 2) * gamesLength)
     if (((gamesLength - 1) / 2) * gamesLength <= resultsArray.length) {
@@ -61,7 +69,8 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
         //check if the default is too high and set it to compare to 1 or 2 instead of 3 and skip if it's already the best
         if (i === 0) {
           let nCheck = await client.query(
-            `SELECT COUNT(results.game_id) FROM results
+            `SELECT COUNT(results.game_id) 
+          FROM results
           WHERE (better_game_id = $1 OR game_id = $1) AND list_id = $2;`,
             [currentGame.id, req.params.id]
           );
@@ -137,7 +146,9 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
           returnedGamesNumber.push(currentGame.id);
           skippedGames.push(currentGame.id);
           let gameArray1 = await client.query(
-            `SELECT results.better_game_id FROM results WHERE results.list_id=$1 AND results.game_id=$2;`,
+            `SELECT results.better_game_id 
+          FROM results
+          WHERE results.list_id=$1 AND results.game_id=$2;`,
             [req.params.id, currentGame.id]
           );
           gameArray1 = gameArray1.rows;
@@ -152,7 +163,9 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
           }
 
           let gameArray2 = await client.query(
-            `SELECT results.game_id FROM results WHERE results.list_id=$1 AND results.better_game_id=$2;`,
+            `SELECT results.game_id 
+          FROM results 
+          WHERE results.list_id=$1 AND results.better_game_id=$2;`,
             [req.params.id, currentGame.id]
           );
           gameArray2 = gameArray2.rows;
@@ -208,14 +221,19 @@ router.get("/:id", rejectUnauthenticated, async (req, res) => {
 router.get("/percent/:id", rejectUnauthenticated, async (req, res) => {
   try {
     let gamesArray = await pool.query(
-      `SELECT game_junction.id, game.name, game.url, game.thumbnail FROM game JOIN game_junction ON game_junction.game_id=game.id WHERE game_junction.list_id=$1;`,
+      `SELECT game_junction.id, game.name, game.url, game.thumbnail 
+    FROM game 
+    JOIN game_junction ON game_junction.game_id=game.id 
+    WHERE game_junction.list_id=$1;`,
       [req.params.id]
     );
     let gamesLength = gamesArray.rows.length;
     let denominator = ((gamesLength - 1) / 2) * gamesLength;
     console.log("denominator", ((gamesLength - 1) / 2) * gamesLength);
     let numerator = await pool.query(
-      `SELECT COUNT(results.id) FROM results WHERE list_id=$1;`,
+      `SELECT COUNT(results.id) 
+    FROM results 
+    WHERE list_id=$1;`,
       [req.params.id]
     );
     console.log("numerator", numerator.rows[0].count);

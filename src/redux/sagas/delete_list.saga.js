@@ -9,15 +9,7 @@ function* deleteList(action) {
       withCredentials: true,
     };
     yield axios.delete("/api/deletelist/" + action.payload.id, config);
-    if (action.payload.getRandom) {
-      yield put({
-        type: "FETCH_USER_LISTS",
-        payload: {
-          currentList: action.payload.listID,
-          callbackHistory: action.payload.callbackHistory,
-        },
-      });
-    }
+    yield put({ type: "FETCH_USER_LISTS" });
   } catch (error) {
     console.log("User get request failed", error);
   }

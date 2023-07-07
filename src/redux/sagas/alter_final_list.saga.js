@@ -13,7 +13,7 @@ function* updateFinishedList(action) {
     // allow the server session to recognize the user
     // If a user is logged in, this will return their information
     // from the server session (req.user)
-    yield axios.put(`/api/editfinishedlist/${action.payload.currentList}/${action.payload.id1}/${action.payload.id2}`, config);
+    yield axios.put(`/api/editfinishedlist/${action.payload.currentList.id}/${action.payload.id1}/${action.payload.id2}`, config);
 
     // now that the session has given us a user object
     // with an id and username set the client-side user object to let

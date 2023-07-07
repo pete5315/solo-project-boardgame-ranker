@@ -10,6 +10,7 @@ import finishedList from './finished_list.reducer';
 import bggProcessing from './bgg_processing.reducer';
 import progress from './progress.reducer';
 import currentStep from './current_step.reducer';
+import listComplete from './listcomplete.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   bggProcessing,
   progress,
   currentStep,
+  listComplete,
 });
 
 export default rootReducer;

@@ -3,7 +3,7 @@ const games = (state = [], action) => {
     case 'SET_GAMES':
       return [...action.payload];
     case 'UNSET_GAMES':
-      return null;
+      return [];
     default:
       return state;
   }

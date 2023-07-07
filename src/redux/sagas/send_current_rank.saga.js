@@ -32,7 +32,7 @@ function* sendCurrentRank(action) {
     yield put({
       type: "GET_RANDOM_GAMES",
       payload: {
-        currentList: action.payload.listID,
+        currentList: {id: action.payload.listID},
         callbackHistory: action.payload.callbackHistory,
       },
     });

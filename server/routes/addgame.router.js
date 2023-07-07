@@ -8,7 +8,6 @@ const userStrategy = require("../strategies/user.strategy");
 
 const router = express.Router();
 
-// Handles Ajax request for user information if user is authenticated
 router.post("/", rejectUnauthenticated, (req, res) => {
   if (req.body.id === null) {
     req.body.id = 1;
@@ -57,7 +56,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
                   `SELECT name, url, thumbnail FROM game
               JOIN game_junction ON game_junction.game_id=game.id
               JOIN list ON list_id=$1;`,
-                  [req.body.id[0]]
+                  [req.body.id]
                 )
                 .then((results3) =>
                   res.send({ rows: results3.rows, id: req.body })

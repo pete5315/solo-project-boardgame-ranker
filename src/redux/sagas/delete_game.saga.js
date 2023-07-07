@@ -13,7 +13,7 @@ function* deleteGame(action) {
       yield put({
         type: "GET_RANDOM_GAMES",
         payload: {
-          currentList: action.payload.listID,
+          currentList: {id: action.payload.listID},
           callbackHistory: action.payload.callbackHistory,
         },
       });
@@ -21,7 +21,7 @@ function* deleteGame(action) {
     yield put({
       type: "GET_GAMES",
       payload: {
-        id: action.payload.listID,
+        id: action.payload.listID.id,
         callbackHistory: action.payload.callbackHistory,
       },
     });

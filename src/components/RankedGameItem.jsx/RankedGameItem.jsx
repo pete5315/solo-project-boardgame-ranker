@@ -44,8 +44,8 @@ function RankedGamesItem(props) {
         {props.i === 0 ? (
           <div></div>
         ) : (
-          <IconButton size="small">
-            <ArrowUpwardIcon onClick={handleUp}>MOVE UP</ArrowUpwardIcon>
+          <IconButton onClick={handleUp} size="small">
+            <ArrowUpwardIcon >MOVE UP</ArrowUpwardIcon>
           </IconButton>
         )}
       </td>

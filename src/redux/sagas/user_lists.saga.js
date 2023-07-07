@@ -24,8 +24,26 @@ function* fetchUserLists() {
   }
 }
 
+function* setListIncomplete() {
+  try {
+    const config = {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    };
+
+    // the config includes credentials which
+    // allow the server session to recognize the user
+    // If a user is logged in, this will return their information
+    // from the server session (req.user)
+    // yield axios.post(`/api/userlist/incomplete/${action.payload.id}`, data, config);
+  } catch (error) {
+    console.log('User get request failed', error);
+  }
+}
+
 function* userListsSaga() {
   yield takeLatest('FETCH_USER_LISTS', fetchUserLists);
+  yield takeLatest('SET_LIST_INCOMPLETE', setListIncomplete);
 }
 
 export default userListsSaga;

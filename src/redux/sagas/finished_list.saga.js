@@ -13,7 +13,7 @@ function* getFinishedList(action) {
     // allow the server session to recognize the user
     // If a user is logged in, this will return their information
     // from the server session (req.user)
-    const response = yield axios.get(`/api/finishedlist/${action.payload}`, config);
+    const response = yield axios.get(`/api/finishedlist/${action.payload.id}`, config);
 
     // now that the session has given us a user object
     // with an id and username set the client-side user object to let

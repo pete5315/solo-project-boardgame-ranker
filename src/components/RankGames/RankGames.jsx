@@ -13,10 +13,11 @@ function RankGames() {
   const currentList = useSelector((store) => store.currentList);
   const progress = useSelector((store) => store.progress);
   const callbackHistory = useHistory();
+  console.log(currentList);
 
   useEffect(() => {
     getARandomGame();
-    // dispatch({ type: "SET_CURRENT_STEP", payload: 2 });
+    dispatch({ type: "SET_CURRENT_STEP", payload: 2 });
   }, []);
 
   function getARandomGame() {
@@ -24,7 +25,7 @@ function RankGames() {
     dispatch({
       type: "GET_RANDOM_GAMES",
       payload: { currentList, callbackHistory },
-      listID: currentList,
+      listID: currentList.id,
     });
   }
   console.log("random games", randomGames);

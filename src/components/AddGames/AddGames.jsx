@@ -3,50 +3,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import AddedGames from "../AddedGames/AddedGames";
 import { Link } from "react-router-dom";
-import './AddGames.css'
+import "./AddGames.css";
 
 function AddGames() {
   let dispatch = useDispatch();
   const [newGameName, setNewGameName] = useState("");
   const [bggName, setBGGName] = useState("");
-  let listNumber = useSelector((store) => store.currentList);
+  let list = useSelector((store) => store.currentList);
   let bggProcessing = useSelector((store) => store.bggProcessing);
 
   useEffect(() => {
     checkIfInList();
-   dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
+    dispatch({ type: "SET_CURRENT_STEP", payload: 1 });
   }, []);
 
   function checkIfInList() {
-    if (listNumber) {
-      console.log(listNumber);
-      dispatch({ type: "GET_GAMES", payload: { id: listNumber } });
+    if (list.id) {
+      console.log(list.id);
+      dispatch({ type: "GET_GAMES", payload: { id: list.id } });
       return;
     } else {
-      dispatch({ type: "SET_NEW_LIST" });
+      // dispatch({ type: "SET_NEW_LIST" });
     }
   }
 
   function getBGG(event) {
     event.preventDefault();
-      dispatch({
-        type: "GET_BGG",
-      payload: { bgg: bggName, id: listNumber },
-    
-  });
-      
+    dispatch({
+      type: "GET_BGG",
+      payload: { bgg: bggName, id: list },
+    });
   }
 
   function submitTheData(event) {
     event.preventDefault();
-    console.log(listNumber);
-    if (listNumber === null) {
-      listNumber = 1;
+    console.log(list.id);
+    if (list.id === null) {
+      list.id = 1;
     }
 
     dispatch({
       type: "ADD_GAME",
-      payload: { newGame: newGameName, id: listNumber, url: null },
+      payload: { newGame: newGameName, id: list.id, url: null },
     });
     setNewGameName("");
   }

@@ -15,7 +15,8 @@ function* newList(action) {
     let response = yield axios.get('/api/newlist/', config);
     response=response.data[0]
     yield put({ type: 'SET_CURRENT_LIST', payload: response });
-    // yield put({ type: 'UNSET_RANDOM_GAMES', payload: response });
+    yield put({ type: 'UNSET_RANDOM_GAMES', payload: response });
+    yield put({ type: 'UNSET_GAMES', payload: response });
     yield action.payload.callbackHistory.push('/inputs')
   } catch (error) {
     console.log('User get request failed', error);

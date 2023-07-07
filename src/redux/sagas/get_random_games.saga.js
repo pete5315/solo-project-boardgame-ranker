@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom/cjs/react-router-dom";
 
 // worker Saga: will be fired on "FETCH_USER" actions
 function* randomGames(action) {
-  console.log(action);
+  console.log("action", action);
   try {
     const config = {
       headers: { "Content-Type": "application/json" },
@@ -16,7 +16,7 @@ function* randomGames(action) {
     // If a user is logged in, this will return their information
     // from the server session (req.user)
     const games = yield axios.get(
-      `/api/randomgames/${action.payload.currentList}`,
+      `/api/randomgames/${action.payload.currentList.id}`,
       config
     );
     // yield put ({type:'GET_GAMES', payload:action.payload.id[0].id});
@@ -28,9 +28,14 @@ function* randomGames(action) {
 
     if (games.data[0] === "complete") {
       console.log("COMPLETE COMPLETE");
+      yield put({ type: "SET_RANDOM_GAMES", payload: games.data });
       action.payload.callbackHistory.push("/list");
+    } else {
+      yield put({ type: "UNSET_LIST_COMPLETE", payload: games.data });
+      yield put({ type: "SET_LIST_INCOMPLETE", payload: action.payload.currentList.id });
     }
     yield put({ type: "SET_RANDOM_GAMES", payload: games.data });
+    console.log(action.payload);
     yield put({
       type: "GET_PROGRESS",
       payload: { currentList: action.payload.currentList },
@@ -47,7 +52,7 @@ function* getProgress(action) {
       withCredentials: true,
     };
     let progress = yield axios.get(
-      `/api/randomgames/percent/${action.payload.currentList}`,
+      `/api/randomgames/percent/${action.payload.currentList.id}`,
       config
     );
     yield put({ type: "SET_PROGRESS", payload: progress });

@@ -32,18 +32,18 @@ function GameCard(props) {
           ...currentRank,
           best: props.game.id,
           randomGames,
-          listID: currentList,
+          listID: currentList.id,
         },
       });
     } else {
-      console.log("we have a current worst");
+      console.log("we have a current best");
       dispatch({
         type: "SEND_CURRENT_RANK",
         payload: {
           ...currentRank,
           best: props.game.id,
           randomGames,
-          listID: currentList,
+          listID: currentList.id,
           callbackHistory,
         },
       });
@@ -60,7 +60,7 @@ function GameCard(props) {
         payload: {
           ...currentRank,
           worst: props.game.id,
-          listID: currentList,
+          listID: currentList.id,
           callbackHistory,
         },
       });
@@ -72,7 +72,7 @@ function GameCard(props) {
           worst: props.game.id,
           randomGames,
           callbackHistory,
-          listID: currentList,
+          listID: currentList.id,
         },
       });
     }
@@ -82,7 +82,7 @@ function GameCard(props) {
       type: "DELETE_GAME",
       payload: {
         game: props.game,
-        listID: currentList,
+        listID: currentList.id,
         id: props.game.id,
         getRandom: true,
       },

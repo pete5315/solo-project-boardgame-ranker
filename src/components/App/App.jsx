@@ -24,10 +24,14 @@ import AddGames from "../AddGames/AddGames";
 import RankGames from "../RankGames/RankGames";
 import ListRankedGames from "../ListRankedGames/ListRankedGames";
 
+import Divider from '@mui/material/Divider';
+
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const currentList = useSelector((store) => store.currentList);
+  const listComplete = useSelector((store) => store.listComplete);
+
   useEffect(() => {
     dispatch({ type: "FETCH_USER" });
   }, [dispatch]);
@@ -36,6 +40,8 @@ function App() {
     <Router>
       <div>
         <Nav />
+        <Divider />
+        <br></br>
         <Switch>
           {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
           <Redirect exact from="/" to="/home" />
@@ -88,7 +94,14 @@ function App() {
               <Redirect to="/user" />
             ) : (
               // Otherwise, show the login page
-              <RankGames />
+              !listComplete ? (
+                // Otherwise, show the login page
+                <RankGames />
+              ) : (
+                // If the user is already logged in,
+                // redirect to the /user page
+                <Redirect to="/list" />
+              )
             )}
           </ProtectedRoute>
 

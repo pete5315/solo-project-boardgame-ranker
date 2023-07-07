@@ -9,11 +9,11 @@ function UserListItem({ list }) {
   function setCurrentList() {
     dispatch({
       type: "SET_CURRENT_LIST",
-      payload: list.id,
+      payload: list,
     });
-    // dispatch({
-    //   type: "UNSET_RANDOM_GAMES",
-    // });
+    dispatch({
+      type: "UNSET_RANDOM_GAMES",
+    });
   }
 
   function removeList() {
