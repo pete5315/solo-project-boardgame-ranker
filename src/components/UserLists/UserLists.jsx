@@ -30,7 +30,7 @@ function UserLists() {
         </tr>
       </thead>
       <tbody>
-        {lists && lists.map((list, i) => <UserListItem list={list} i={i} />)} 
+        {lists && lists.map((list) => <UserListItem list={list} />)} 
         
       </tbody>
     </table>

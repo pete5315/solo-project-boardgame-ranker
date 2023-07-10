@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function UserListItem({ list, i }) {
+function UserListItem({ list }) {
   let dispatch = useDispatch();
 
   function setCurrentList() {
@@ -40,20 +40,18 @@ function UserListItem({ list, i }) {
           "-" +
           list.date.slice(0, 4)}
       </td>
-      <td>
-        <Button
-          variant="text"
-          sx={{
-            color: "grey",
-            "&:hover": {
-              color: "rgb(108, 108, 108)",
-            },
-          }}
-          onClick={removeList}
-        >
-          <DeleteIcon></DeleteIcon>
-        </Button>
-      </td>
+      <Button
+        variant="text"
+        sx={{
+          color: "grey",
+          "&:hover": {
+            color: "rgb(108, 108, 108)",
+          },
+        }}
+        onClick={removeList}
+      >
+        <DeleteIcon></DeleteIcon>
+      </Button>
     </tr>
   );
 }

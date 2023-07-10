@@ -16,7 +16,7 @@ function Nav() {
         </Link>
       </div>
       <div>
-      {user.id && (<NavStepper />)}
+        <NavStepper />
       </div>
       <div>
         {/* If no user is logged in, show these links */}

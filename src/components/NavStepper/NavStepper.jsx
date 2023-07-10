@@ -13,7 +13,6 @@ export default function HorizontalNonLinearStepper() {
   
   let history = useHistory();
   const activeStep = useSelector((store) => store.currentStep);
-  const user = useSelector((store) => store.user);
   const [completed, setCompleted] = React.useState({});
 
   const totalSteps = () => {
@@ -72,7 +71,6 @@ export default function HorizontalNonLinearStepper() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      
       <Stepper activeStep={activeStep} onSelectionChange={() => handleClick}>
         {steps.map((label, index) => {
           const stepProps = {};

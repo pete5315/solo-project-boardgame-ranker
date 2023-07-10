@@ -22,7 +22,7 @@ function* getBGG(action) {
         responseType: "document",
       }
     );
-    console.log(action.payload)
+
     yield console.log(BGGresponse.status);
     if (BGGresponse.status===200) {
     BGGresponse = BGGresponse.data.all;
@@ -44,7 +44,7 @@ function* getBGG(action) {
       }
       if (jitterator === 3) {
         collection.push(currentObject);
-        currentObject = { id: action.payload.id.id };
+        currentObject = { id: action.payload.id };
         jitterator = 0;
       }
     }
