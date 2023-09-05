@@ -112,13 +112,9 @@ function App() {
               // If the user is already logged in,
               // redirect to the /user page
               <Redirect to="/user" />
-            ) : listComplete ? (
+            ) : (
               // Otherwise, show the login page
               <ListRankedGames />
-            ) : (
-              // If the user is already logged in,
-              // redirect to the /user page
-              <Redirect to="/rank" />
             )}
           </ProtectedRoute>
 
